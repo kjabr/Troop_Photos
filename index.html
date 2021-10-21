@@ -16,11 +16,22 @@
       height: 0;
       background-color: #F7F6EF;
     }
-    img{
+    #img2{
       max-width: 350px;
       max-height: 250px;
       transition: 0.4s;
     }
+
+    #img1{
+      max-width: 500px;
+      max-height: 400px;
+      transition: 0.4s;
+    }
+    #img1:hover {
+      max-width: 550px;
+      max-height: 450px;
+    }
+
     .div1 {
       transition: 0.4s;
     }
@@ -36,7 +47,7 @@
 
   </style>
 
-  <body>
+  <body id="main_body">
     <form id='Form'>
       <center><h2>Troop Photos</h2></center>
       <center>
@@ -146,7 +157,7 @@
             dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
           }
 
-          dynamic_html_string = dynamic_html_string +  "<br><img src='" +
+          dynamic_html_string = dynamic_html_string +  "<br><img id='img1' src='" +
             dynamic_data[i][3] + " alt=' ' /></p>";
         }
 
@@ -164,14 +175,15 @@
             dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
           }
 
-          dynamic_html_string = dynamic_html_string +  "<br><img src='" + dynamic_data[i][3] +
+          dynamic_html_string = dynamic_html_string +  "<br><img id='img1' src='" + dynamic_data[i][3] +
             " alt=' ' /></p>" + "</div> <br>";
         }
 
       }
 
       //append the dynamic_html_string to the html body section
-      document.body.innerHTML = document.body.innerHTML + dynamic_html_string;
+    //  document.body.innerHTML = document.body.innerHTML + dynamic_html_string;
+      document.getElementById("main_body").innerHTML = dynamic_html_string;
     }
 
     //the build_html function is called only-if the Google Sheet part is a success
@@ -202,7 +214,7 @@
             dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
           }
 
-          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img src='" +
+          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img id='img2' src='" +
             url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>";
         }
           dynamic_html_string += "</div>";
@@ -224,7 +236,7 @@
             dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
           }
 
-          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img src='" +
+          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img id='img2' src='" +
             url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>" + "</div> </div> <br>";
         }
 
