@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+    <style>
+    .flex-container{
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-around;
+      max-width: 1200px;
+      align-items: center;
+    }
+    body {
+      max-width: 100%;
+      height: 0;
+      background-color: #F7F6EF;
+    }
+    img{
+      max-width: 350px;
+      max-height: 250px;
+      transition: 0.4s;
+    }
+    .div1 {
+      transition: 0.4s;
+    }
+    .div2 {
+      transition: 0.4s;
+    }
+    .div1:hover {
+      transform: scale(1.2);
+    }
+    .div2:hover {
+      transform: scale(1.2);
+    }
+
+  </style>
+
+  <body>
+    <form id='Form'>
+      <center><h2>Troop Photos</h2></center>
+      <center>
+        <br>
+        <label for='_year'>Pick a year: </label>
+        <select id='_year' name='_year' onchange="fetch_logic(this)">
+          <option value='2021' selected>2021</option>
+          <option value='2020'>2020</option>
+          <option value='2019'>2019</option>
+          <option value='2018'>2018</option>
+          <option value='2017'>2017</option>
+          <option value='2016'>2016</option>
+          <option value='2015'>2015</option>
+          <option value='2014'>2014</option>
+          <option value='2013'>2013</option>
+          <option value='2012'>2012</option>
+          </select>
+          </center>
+          </form>
+          <br><br>
+        <div id='content'>
+          </div>
+
+  </body>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var init_select = document.getElementById("_year");
+      fetch_logic(init_select);
+    }, false);
+
+    function fetch_logic(selected_object){
+      var value = selected_object.value;
+      document.getElementById("content").innerHTML = "<center style='color:blue'>" + "Loading..." + "</center";
+      google.script.run.withSuccessHandler(build_html).withFailureHandler(invalid_input).get_data_from_sheets(value);
+    }
+
+    //the build_html function is called only-if the Google Sheet part is a success
+    function build_html(dynamic_data){
+      var dynamic_html_string = "";
+      var i = 0;
+      var url_split = [];
+
+
+      //Iterate against the number of rows in the spreadsheet (dynamic_data.length)
+      while (i < dynamic_data.length){
+
+        //starting on the 2nd row
+        i++;
+
+        //check to see if column A has a yes. Keep going to the next column until you find one.
+        while (i < dynamic_data.length) {
+          if (dynamic_data[i][0] != "yes" || !dynamic_data[i][1] || !dynamic_data[i][3]) {i++;}
+            else break;
+        }
+        if (i < dynamic_data.length){
+          url_split = dynamic_data[i][3].split(/=w/);
+          dynamic_html_string += "<div class='flex-container'>";
+          dynamic_html_string += "<div class='div1'>";
+
+          dynamic_html_string += "<p>" + dynamic_data[i][1];
+          if (dynamic_data[i][2].length > 0){
+            dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
+          }
+
+          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img src='" +
+            url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>";
+        }
+          dynamic_html_string += "</div>";
+          dynamic_html_string += "<div class='div2'>";
+
+        i++;
+
+        //check to see if column A has a yes. Keep going to the next column until you find one.
+        while (i < dynamic_data.length) {
+          if (dynamic_data[i][0] != "yes" || !dynamic_data[i][1] || !dynamic_data[i][3]) {i++;}
+            else break;
+        }
+
+        if (i < dynamic_data.length){
+          url_split = dynamic_data[i][3].split(/=w/);
+          dynamic_html_string = dynamic_html_string + "<p>" + dynamic_data[i][1];
+          if (dynamic_data[i][2].length > 0){
+
+            dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
+          }
+
+          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img src='" +
+            url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>" + "</div> </div> <br>";
+        }
+
+      }
+
+      //append the dynamic_html_string to the html body section
+     // document.body.innerHTML += "<center>" + dynamic_html_string + "</center>";
+     document.getElementById("content").innerHTML = "<center>" + dynamic_html_string + "</center>";
+    }
+
+    function invalid_input(){
+      document.getElementById("content").innerHTML = "<center>" + "The year you picked doesn't have any data<br>" + "</center>";
+    }
+  </script>
+
+</html>
