@@ -42,7 +42,7 @@
       <center>
         <br>
         <label for='_year'>Pick a year: </label>
-        <select id='_year' name='_year' onchange="fetch_logic(this)">
+        <select id='_year' name='_year' onchange="fetch_more(this)">
           <option value='2021' selected>2021</option>
           <option value='2020'>2020</option>
           <option value='2019'>2019</option>
@@ -63,15 +63,115 @@
   </body>
 
   <script>
+    var CLIENT_ID = '535857122296-upqmglmmp6fuiakh5m3bs5i7sft33n7v.apps.googleusercontent.com';
+    var API_KEY = 'AIzaSyB7WuDhnX-e-vYQ76PeyNbX9AfNDIAb2xA';
+    var DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+    var SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
+
+    var announce_page = false;
+
+    var dynamic_html_string = "";
+    var i = 0;
+
     document.addEventListener('DOMContentLoaded', function() {
-      var init_select = document.getElementById("_year");
-      fetch_logic(init_select);
     }, false);
 
-    function fetch_logic(selected_object){
-      var value = selected_object.value;
+    function handleClientLoad() {
+      gapi.load('client', initClient);
+    }
+
+    function initClient() {
+      gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        discoveryDocs: DISCOVERY_DOCS,
+        scope: SCOPES
+      }).then(function () {
+        init_web_app(document.getElementById("_year").value);
+      }, function(error) {
+        console.log(JSON.stringify(error, null, 2));
+      });
+    }
+
+    function init_web_app(init_select){
+      var queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      //var init_select = document.getElementById("_year").value;
+      if (urlParams.get("scope")) {
+        urlParams.get("scope") == "announce" ? (init_select == "Announce", announce_page = true) : null;
+      }
+      gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: '154yyLSfhQsdFXfNRheUeMhIlv6_cLsKGxegB0x00MQ8',
+        range: init_select + "!A2:D",
+      }).then(function(response) {
+        var range = response.result;
+        //console.log(range.values);
+        //wreath_data = range2.values;
+        //build_html(range2.values);
+        announce_page == false ? fetch_logic(range.values) : build_announcement_page(range.values);
+
+      }, function(response) {
+        console.log('Error: ' + response.result.error.message);
+      });
+
+    }
+
+    function fetch_more(element){
+      var value = element.value;
+      init_web_app(value);
+    }
+
+    function fetch_logic(dynamic_data1){
       document.getElementById("content").innerHTML = "<center style='color:blue'>" + "Loading..." + "</center";
-      google.script.run.withSuccessHandler(build_html).withFailureHandler(invalid_input).get_data_from_sheets(value);
+      //google.script.run.withSuccessHandler(build_html).withFailureHandler(invalid_input).get_data_from_sheets(value);
+      build_html(dynamic_data1);
+    }
+
+    function build_announcement_page(dynamic_data){
+
+      //Iterate against the number of rows in the spreadsheet (dynamic_data.length)
+      while (i < dynamic_data.length){
+
+        //starting on the 2nd row
+        i++;
+
+        //check to see if column A has a yes. Keep going to the next column until you find one.
+        while (i < dynamic_data.length) {
+          if (dynamic_data[i][0] != "yes") {i++;}
+            else break;
+        }
+        if (i < dynamic_data.length){
+          dynamic_html_string = dynamic_html_string + "<div class='flex-container'> <p>" + dynamic_data[i][1];
+          if (dynamic_data[i][2].length > 0){
+            dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
+          }
+
+          dynamic_html_string = dynamic_html_string +  "<br><img src='" +
+            dynamic_data[i][3] + " alt=' ' /></p>";
+        }
+
+        i++;
+
+        //check to see if column A has a yes. Keep going to the next column until you find one.
+        while (i < dynamic_data.length) {
+          if (dynamic_data[i][0] != "yes") {i++;}
+            else break;
+        }
+
+        if (i < dynamic_data.length){
+          dynamic_html_string = dynamic_html_string + "<p>" + dynamic_data[i][1];
+          if (dynamic_data[i][2].length > 0){
+            dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
+          }
+
+          dynamic_html_string = dynamic_html_string +  "<br><img src='" + dynamic_data[i][3] +
+            " alt=' ' /></p>" + "</div> <br>";
+        }
+
+      }
+
+      //append the dynamic_html_string to the html body section
+      document.body.innerHTML = document.body.innerHTML + dynamic_html_string;
     }
 
     //the build_html function is called only-if the Google Sheet part is a success
@@ -138,6 +238,11 @@
     function invalid_input(){
       document.getElementById("content").innerHTML = "<center>" + "The year you picked doesn't have any data<br>" + "</center>";
     }
+  </script>
+
+  <script async defer src="https://apis.google.com/js/api.js"
+    onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
   </script>
 
 </html>
