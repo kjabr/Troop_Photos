@@ -85,6 +85,7 @@
     var i = 0;
 
     document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById("Form").style.display = "none";
     }, false);
 
     function handleClientLoad() {
@@ -109,7 +110,10 @@
       const urlParams = new URLSearchParams(queryString);
       //var init_select = document.getElementById("_year").value;
       if (urlParams.get("scope")) {
-        urlParams.get("scope") == "announce" ? (init_select == "Announce", announce_page = true) : null;
+        urlParams.get("scope") == "announce" ? (
+          init_select == "Announce",
+          announce_page = true
+      ) : null;
       }
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: '154yyLSfhQsdFXfNRheUeMhIlv6_cLsKGxegB0x00MQ8',
@@ -188,6 +192,7 @@
 
     //the build_html function is called only-if the Google Sheet part is a success
     function build_html(dynamic_data){
+      document.getElementById("Form").style.display = "";
       var dynamic_html_string = "";
       var i = 0;
       var url_split = [];
