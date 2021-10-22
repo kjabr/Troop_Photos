@@ -83,6 +83,7 @@
 
     var dynamic_html_string = "";
     var i = 0;
+    var sheet_id = "";
 
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("Form").style.display = "none";
@@ -115,8 +116,13 @@
           announce_page = true
       ) : null;
       }
+
+      if (urlParams.get("id")) {
+        urlParams.get("id") != null ? sheet_id = urlParams.get("id") : null;
+      }
+
       gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: '154yyLSfhQsdFXfNRheUeMhIlv6_cLsKGxegB0x00MQ8',
+        spreadsheetId: sheet_id,
         range: init_select + "!A2:D",
       }).then(function(response) {
         var range = response.result;
