@@ -6,30 +6,38 @@
     <style>
     .flex-container{
       display: flex;
-      flex-flow: row wrap;
+      flex-flow: row nowrap;
       justify-content: space-around;
       max-width: 1200px;
       align-items: center;
+
     }
+
+    #main_container, #content{
+      width: 100%;
+    }
+
     body {
-      max-width: 100%;
-      height: 0;
+      width: 100%;
       background-color: #F7F6EF;
     }
     #img2{
-      max-width: 350px;
-      max-height: 250px;
+      width: 100%;
+      height: auto;
       transition: 0.4s;
     }
 
     #img1{
-      max-width: 500px;
-      max-height: 400px;
+      width: 100%;
+      height: auto;
       transition: 0.4s;
+      margin: 20px;
+      margin: 10px;
+
     }
+
     #img1:hover {
-      max-width: 550px;
-      max-height: 450px;
+      transform: scale(1.2);
     }
 
     .div1 {
@@ -37,6 +45,8 @@
     }
     .div2 {
       transition: 0.4s;
+      margin: 0 0 0 15px;
+
     }
     .div1:hover {
       transform: scale(1.2);
@@ -48,6 +58,7 @@
   </style>
 
   <body id="main_body">
+    <div id="main_container">
     <form id='Form'>
       <center><h2>Troop Photos</h2></center>
       <center>
@@ -66,10 +77,11 @@
           <option value='2012'>2012</option>
           </select>
           </center>
-          </form>
+     </form>
           <br><br>
-        <div id='content'>
-          </div>
+     <div id='content'>
+     </div>
+    </div>
 
   </body>
 
@@ -128,8 +140,8 @@
         var range = response.result;
         //console.log(range.values);
         //wreath_data = range2.values;
-        //build_html(range2.values);
-        announce_page == false ? fetch_logic(range.values) : build_announcement_page(range.values);
+        build_html(range.values);
+        //announce_page == false ? fetch_logic(range.values) : build_announcement_page(range.values);
 
       }, function(response) {
         console.log('Error: ' + response.result.error.message);
@@ -148,57 +160,9 @@
       build_html(dynamic_data1);
     }
 
-    function build_announcement_page(dynamic_data){
-
-      //Iterate against the number of rows in the spreadsheet (dynamic_data.length)
-      while (i < dynamic_data.length){
-
-        //starting on the 2nd row
-        i++;
-
-        //check to see if column A has a yes. Keep going to the next column until you find one.
-        while (i < dynamic_data.length) {
-          if (dynamic_data[i][0] != "yes") {i++;}
-            else break;
-        }
-        if (i < dynamic_data.length){
-          dynamic_html_string = dynamic_html_string + "<div class='flex-container'> <p>" + dynamic_data[i][1];
-          if (dynamic_data[i][2].length > 0){
-            dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
-          }
-
-          dynamic_html_string = dynamic_html_string +  "<br><img id='img1' src='" +
-            dynamic_data[i][3] + " alt=' ' /></p>";
-        }
-
-        i++;
-
-        //check to see if column A has a yes. Keep going to the next column until you find one.
-        while (i < dynamic_data.length) {
-          if (dynamic_data[i][0] != "yes") {i++;}
-            else break;
-        }
-
-        if (i < dynamic_data.length){
-          dynamic_html_string = dynamic_html_string + "<p>" + dynamic_data[i][1];
-          if (dynamic_data[i][2].length > 0){
-            dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
-          }
-
-          dynamic_html_string = dynamic_html_string +  "<br><img id='img1' src='" + dynamic_data[i][3] +
-            " alt=' ' /></p>" + "</div> <br>";
-        }
-
-      }
-
-      //append the dynamic_html_string to the html body section
-    //  document.body.innerHTML = document.body.innerHTML + dynamic_html_string;
-      document.getElementById("main_body").innerHTML = dynamic_html_string;
-    }
-
     //the build_html function is called only-if the Google Sheet part is a success
     function build_html(dynamic_data){
-      document.getElementById("Form").style.display = "";
+      announce_page == false ? document.getElementById("Form").style.display = "" : null;
       var dynamic_html_string = "";
       var i = 0;
       var url_split = [];
