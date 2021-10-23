@@ -133,7 +133,8 @@
       if (urlParams.get("scope")) {
         urlParams.get("scope") == "announce" ? (
           init_select == "Announce",
-          announce_page = true
+          announce_page = true,
+          document.getElementById("main_body").style.backgroundColor = "#FFEBCD"
       ) : null;
       }
 
