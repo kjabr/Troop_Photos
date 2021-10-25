@@ -134,7 +134,7 @@
       //var init_select = document.getElementById("_year").value;
       if (urlParams.get("scope")) {
         urlParams.get("scope") == "announce" ? (
-          init_select == "Announce",
+          init_select = "Announce",
           announce_page = true,
           document.getElementById("main_body").style.backgroundColor = "#FFEBCD"
       ) : null;
@@ -146,7 +146,7 @@
 
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: sheet_id,
-        range: init_select + "!A2:D",
+        range: init_select + "!A1:D",
       }).then(function(response) {
         var range = response.result;
         //console.log(range.values);
