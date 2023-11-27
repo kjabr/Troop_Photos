@@ -79,8 +79,9 @@
         <br>
         <label id="label_year" for='_year'>Pick a year: </label>
         <select id='_year' name='_year' onchange="fetch_more(this)">
+          <option value='2025'>2025</option>
           <option value='2024'>2024</option>
-          <option value='2023' selected>2023</option>
+          <option value='2023'>2023</option>
           <option value='2022'>2022</option>
           <option value='2021'>2021</option>
           <option value='2020'>2020</option>
@@ -107,6 +108,7 @@
 
     var sheet_values = {};
     var announce_page = false;
+    var no_data = false;
 
     var dynamic_html_string = "";
     var i = 0;
@@ -114,8 +116,12 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("Form").style.display = "none";
+      const d = new Date();
+      let year = d.getFullYear();
 
-      init_web_app(document.getElementById("_year").value);
+      console.log(year);
+      document.getElementById("_year").value = year;
+      init_web_app(year);
 
     }, false);
 
@@ -140,24 +146,25 @@
                   if (item3.formattedValue) {
                     row_values.push(item3.formattedValue);
                   }
-                  //console.log(item3.effectiveValue.stringValue);
-                  //sheet_interesting_values[i2][i3] = item3.effectiveValue.stringValue;
                 });
                 //console.log(row_values);
                 if (row_values.length > 0 ) {
                   sheet_interesting_values.push(row_values);
-
                 }
             }
             });
             sheet_values[item.properties.title] = sheet_interesting_values;
+            if (sheet_interesting_values[0][0] == "publish?" && sheet_interesting_values.length == 1){
+              no_data = true;
+            }
+            else {
+              no_data = false;2
+            }
           }); 
       }
       else {
         sheet_values[init_select] = [];
-        document.getElementById("Form").style.display = "";
-        document.getElementById("content").innerHTML = "<center>" + "The year you picked doesn't have any data<br>" + "</center>";
-
+        invalid_input();
       }
     }
 
@@ -183,9 +190,12 @@
           "&ranges=" + init_select + "!A1:D100"
         ).then(r => {
           extract_values(r, init_select); //extracts a row:column array of values of each sheet and populates global variable sheet_values
-          if (!r.error && r.sheets[0].data[0].rowData) {
+          if (!r.error && r.sheets[0].data[0].rowData && no_data ==false) {
             build_html(sheet_values[init_select]);
+          }
 
+          if (no_data == true) {
+            invalid_input();
           }
 	      });
     }
@@ -263,6 +273,7 @@
     }
 
     function invalid_input(){
+      document.getElementById("Form").style.display = "";
       document.getElementById("content").innerHTML = "<center>" + "The year you picked doesn't have any data<br>" + "</center>";
     }
   </script>
