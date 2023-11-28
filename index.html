@@ -63,10 +63,19 @@
 
     }
     .div1:hover {
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
     .div2:hover {
-      transform: scale(1.2);
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 700px) {
+      .div1:hover {
+      transform: scale(1);
+    }
+      .div2:hover {
+        transform: scale(1);
+      }
     }
 
   </style>
@@ -118,8 +127,6 @@
       document.getElementById("Form").style.display = "none";
       const d = new Date();
       let year = d.getFullYear();
-
-      console.log(year);
       document.getElementById("_year").value = year;
       init_web_app(year);
 
