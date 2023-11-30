@@ -146,6 +146,8 @@
 
     function extract_values(r, init_select){
       var sheet_interesting_values;
+      var row_in_string = "";
+
       if (!r.error && r.sheets[0].data[0].rowData) {
         r.sheets.forEach((item, i) => {
             sheet_interesting_values = [];
@@ -157,23 +159,29 @@
                   if (item3.formattedValue) {
                     row_values.push(item3.formattedValue);
                   }
+                  else {
+                    row_values.push(""); //empty cells
+                  }
                 });
+                row_in_string = JSON.stringify(row_values).replace(/[\[\]\,\"]/g,''); //convert last row array to string
+
                 //console.log(row_values);
-                if (row_values.length > 0 ) {
+                if (row_in_string.length > 0) {
                   sheet_interesting_values.push(row_values);
                 }
             }
             });
             sheet_values[item.properties.title] = sheet_interesting_values;
+            
             if (sheet_interesting_values[0][0] == "publish?" && sheet_interesting_values.length == 1){
-              no_data = true;
+              no_data = true; //it means the 1st row exists but no other rows (ie empty sheet)
             }
             else {
-              no_data = false;2
+              no_data = false;
             }
           }); 
       }
-      else {
+      else { //execute if we get an error or a sheet is empty
         sheet_values[init_select] = [];
         invalid_input();
       }
