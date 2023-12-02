@@ -34,20 +34,23 @@
       font-size: 14px;
     }
 
-    #img2{
-      width: 100%;
+    .img2{
+      width: auto;
       height: auto;
       transition: 0.4s;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       max-height: 400px;
+      max-width: 100%;
     }
 
-    #img1{
-      width: 100%;
+    .img1{
+      width: auto;
       height: auto;
       transition: 0.4s;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       max-height: 400px;
+      max-width: 100%;
+
     }
 
     #img1:hover {
@@ -257,7 +260,7 @@
             dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
           }
 
-          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img id='img2' src='" +
+          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img id='' class='img1' src='" +
             url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>";
         }
           dynamic_html_string += "</div>";
@@ -279,7 +282,7 @@
             dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
           }
 
-          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img id='img2' src='" +
+          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img id='' class='img2' src='" +
             url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>" + "</div> </div>";
         }
 
