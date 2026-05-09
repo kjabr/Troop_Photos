@@ -263,7 +263,7 @@
             dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
           }
 
-          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img id='' class='img1' src='" +
+          dynamic_html_string = dynamic_html_string +  "<br><a href='" + (dynamic_data[i][2] ? dynamic_data[i][2] : dynamic_data[i][3]) + "' target='_blank'>" + "<img id='' class='img1' src='" +
             url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>";
         }
           dynamic_html_string += "</div>";
@@ -285,7 +285,7 @@
             dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
           }
 
-          dynamic_html_string = dynamic_html_string +  "<br><a href='" + dynamic_data[i][2] + "' target='_blank'>" + "<img id='' class='img2' src='" +
+          dynamic_html_string = dynamic_html_string +  "<br><a href='" + (dynamic_data[i][2] ? dynamic_data[i][2] : dynamic_data[i][3]) + "' target='_blank'>" + "<img id='' class='img2' src='" +
             url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>" + "</div> </div>";
         }
 
