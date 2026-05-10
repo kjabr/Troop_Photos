@@ -17,6 +17,7 @@
       box-sizing: border-box;
       gap: 15px;
       padding: 20px;
+      justify-items: center;
     }
 
     .element_div {      
@@ -247,7 +248,7 @@
 
       dynamic_html_string += "</div>";
 
-     document.getElementById("content").innerHTML = "<center>" + dynamic_html_string + "</center>";
+     document.getElementById("content").innerHTML = dynamic_html_string;
     }
 
     function invalid_input(){
