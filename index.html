@@ -9,13 +9,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
     <style>
-    .flex-container{
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-around;
-      width: 100%;
-      align-items: center;
 
+    .container{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      box-sizing: border-box;
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .element_div {      
+      transition: 0.4s;
+    }
+    .element_div:hover{
+        transform: scale(1.1);
     }
 
     #main_container, #content{
@@ -53,33 +61,8 @@
 
     }
 
-    #img1:hover {
-      transform: scale(1.2);
-    }
-
-    .div1 {
-      transition: 0.4s;
-    }
-    .div2 {
-      transition: 0.4s;
-      margin: 0 0 0 15px;
-
-    }
-    .div1:hover {
-      transform: scale(1.1);
-    }
-    .div2:hover {
-      transform: scale(1.1);
-    }
-
     @media (max-width: 700px) {
-      .div1 > p, .div2 > p {
-        font-size: 14px;
-      }
-      .div1:hover {
-      transform: scale(1);
-    }
-      .div2:hover {
+      .element_div:hover{
         transform: scale(1);
       }
     }
@@ -234,65 +217,31 @@
       build_html(dynamic_data1);
     }
 
-    //the build_html function is called only-if the Google Sheet part is a success
     function build_html(dynamic_data){
       announce_page == false ? document.getElementById("Form").style.display = "" : null;
       var dynamic_html_string = "";
       var i = 0;
       var url_split = [];
 
+      dynamic_html_string = "<div class='container'>";
 
-      //Iterate against the number of rows in the spreadsheet (dynamic_data.length)
-      while (i < dynamic_data.length){
 
-        //starting on the 2nd row
-        i++;
-
-        //check to see if column A has a yes. Keep going to the next column until you find one.
-        while (i < dynamic_data.length) {
-          if (dynamic_data[i][0] != "yes" || !dynamic_data[i][1] || !dynamic_data[i][3]) {i++;}
-            else break;
-        }
-        if (i < dynamic_data.length){
+      for(let i=1; i<dynamic_data.length; i++){
+        if (dynamic_data[i][0] == "yes" && dynamic_data[i][1] && dynamic_data[i][3]){
           url_split = dynamic_data[i][3].split(/=w/);
-          dynamic_html_string += "<div class='flex-container'>";
-          dynamic_html_string += "<div class='div1'>";
-
-          dynamic_html_string += "<p>" + dynamic_data[i][1];
+          dynamic_html_string += "<div class='element_div'>";
+          dynamic_html_string += dynamic_data[i][1];
           if (dynamic_data[i][2].length > 0){
-            dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
+            dynamic_html_string += " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
           }
 
-          dynamic_html_string = dynamic_html_string +  "<br><a href='" + (dynamic_data[i][2] ? dynamic_data[i][2] : dynamic_data[i][3]) + "' target='_blank'>" + "<img id='' class='img1' src='" +
-            url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>";
+          dynamic_html_string += `<br><a href="${(dynamic_data[i][2] ? dynamic_data[i][2] : dynamic_data[i][3])}" target="_blank"> <img class="img1" src="${url_split[0]}=w500-no?authuser=0" alt=" " /></a></p>`;
+          dynamic_html_string += "</div>"
         }
-          dynamic_html_string += "</div>";
-          dynamic_html_string += "<div class='div2'>";
-
-        i++;
-
-        //check to see if column A has a yes. Keep going to the next column until you find one.
-        while (i < dynamic_data.length) {
-          if (dynamic_data[i][0] != "yes" || !dynamic_data[i][1] || !dynamic_data[i][3]) {i++;}
-            else break;
-        }
-
-        if (i < dynamic_data.length){
-          url_split = dynamic_data[i][3].split(/=w/);
-          dynamic_html_string = dynamic_html_string + "<p>" + dynamic_data[i][1];
-          if (dynamic_data[i][2].length > 0){
-
-            dynamic_html_string = dynamic_html_string + " (<a href='" + dynamic_data[i][2] + "' target='_blank'>link to album</a>)";
-          }
-
-          dynamic_html_string = dynamic_html_string +  "<br><a href='" + (dynamic_data[i][2] ? dynamic_data[i][2] : dynamic_data[i][3]) + "' target='_blank'>" + "<img id='' class='img2' src='" +
-            url_split[0] + "=w500-no?authuser=0 alt=' ' /></a></p>" + "</div> </div>";
-        }
-
       }
 
-      //append the dynamic_html_string to the html body section
-     // document.body.innerHTML += "<center>" + dynamic_html_string + "</center>";
+      dynamic_html_string += "</div>";
+
      document.getElementById("content").innerHTML = "<center>" + dynamic_html_string + "</center>";
     }
 
