@@ -268,8 +268,9 @@
 
       var gas_link = `https://script.google.com/macros/s/${id3}/exec`;
       var log_object = {};
+      const userAgent = navigator.userAgent;
       log_object["sheet_name"] = "Photos";
-      log_object["action"] = "Load photos";
+      log_object["action"] = ["Load photos", userAgent];
 
       getip().then(ip => {
         log_object["ip_addr"] = ip;
